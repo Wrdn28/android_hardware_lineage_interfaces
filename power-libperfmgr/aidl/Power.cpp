@@ -28,6 +28,10 @@
 
 #include <mutex>
 
+#ifndef TAP_TO_WAKE_NODE
+#define TAP_TO_WAKE_NODE "/sys/touchpanel/double_tap"
+#endif
+
 #include "PowerHintSession.h"
 #include "PowerSessionManager.h"
 
@@ -87,6 +91,11 @@ ndk::ScopedAStatus Power::setMode(Mode type, bool enabled) {
     }
 
     switch (type) {
+        case Mode::DOUBLE_TAP_TO_WAKE:
+            {
+            ::android::base::WriteStringToFile(enabled ? "1" : "0", TAP_TO_WAKE_NODE, true);
+            [[fallthrough]];
+            }
         case Mode::SUSTAINED_PERFORMANCE:
             if (enabled) {
                 HintManager::GetInstance()->DoHint("SUSTAINED_PERFORMANCE");
@@ -97,8 +106,6 @@ ndk::ScopedAStatus Power::setMode(Mode type, bool enabled) {
             if (mSustainedPerfModeOn) {
                 break;
             }
-            [[fallthrough]];
-        case Mode::DOUBLE_TAP_TO_WAKE:
             [[fallthrough]];
         case Mode::FIXED_PERFORMANCE:
             [[fallthrough]];
