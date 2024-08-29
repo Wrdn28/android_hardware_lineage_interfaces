@@ -18,7 +18,6 @@ cc_binary {
     ],
     relative_install_path: "hw",
     init_rc: ["aidl/android.hardware.power-service.lineage-libperfmgr.rc"],
-    vintf_fragments: ["aidl/android.hardware.power-service.lineage.xml"],
     vendor: true,
     cflags: [
         "-Wno-unused-variable",
